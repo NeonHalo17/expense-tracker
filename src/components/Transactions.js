@@ -15,6 +15,8 @@ function Transactions () {
 
     const [editOpen, setEditOpen] = useState(false);
 
+    const [addOpen, setAddOpen] = useState(false);
+
     const [rowToEdit, setRowtoEdit] = useState(null);
 
     const [sampleData, setSampleData] = useState([
@@ -51,28 +53,44 @@ function Transactions () {
         setSampleData(sampleData.filter((_,i) => i !== index));
     }
 
-    const handleEditRow = (index) => {
+    const handleAddRow = () => {
+        setAddOpen(true);
+    }
+
+    const handleEditRow = (idx) => {
+        setRowtoEdit(idx);
         setEditOpen(true);
     }
 
     const handleNewRow = (newRow) => {
-        setSampleData([...sampleData, newRow]);    
+        setSampleData([...sampleData, newRow]);
+    }
+
+    const handleEditedRow = (newRow) => {
+        setSampleData(
+            sampleData.map((currRow, i) => {
+                if(i !== rowToEdit) return currRow;
+                
+                return newRow;
+            })
+        );
     }
 
     return (
         <>
-            <AddTransaction onSubmit={handleNewRow}/>
-            <div>
+            <button onClick={handleAddRow} className="m-5 mt-3 ml-9 border-black border-2 p-2 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Add Transaction</button>
+            {addOpen && <AddTransaction onSubmit={handleNewRow} onClose={() => setAddOpen(false)}/>}
+            <div className='h-full'>
                 <TableContainer component={Paper} className='w-[100%]'>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" className='w-[100%] overflow-hidden table-auto border-collapse rounded-sm max-w-[95%] m-auto overflow-x-auto border-2 border-solid'>
                     <TableHead className="bg-gray-300">
-                        <TableRow className='w-auto h-[55px]'>
-                            <TableCell align='center' className='font-semibold'> Amount </TableCell>
-                            <TableCell align='center' className='font-semibold'> Category </TableCell>
-                            <TableCell align='center' className='font-semibold'> Date </TableCell>
-                            <TableCell align='center' className='font-semibold'> Type </TableCell>
-                            <TableCell align='center' className='w-[35%] font-semibold'> Description     </TableCell>
-                            <TableCell align='center' className='font-semibold'> Actions </TableCell>
+                        <TableRow className='w-auto h-[55px]'> 
+                            <TableCell align='center'> Amount </TableCell>
+                            <TableCell align='center'> Category </TableCell>
+                            <TableCell align='center'> Date </TableCell>
+                            <TableCell align='center'> Type </TableCell>
+                            <TableCell align='center' className='w-[35%]'> Description </TableCell>
+                            <TableCell align='center'> Actions </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -90,7 +108,7 @@ function Transactions () {
                                 <TableCell align='center'>
                                     <span className='flex justify-around p-[22px] border-collapse cursor-pointer'>
                                         <BsFillTrashFill className='fill-red-500' onClick={() => deleteRow(idx)}/>
-                                        <BsFillPencilFill onClick={() => handleEditRow()}/>
+                                        <BsFillPencilFill onClick={() => handleEditRow(idx)}/>  
                                     </span>
                                 </TableCell>
                             </TableRow>
@@ -99,7 +117,7 @@ function Transactions () {
                 </Table>
             </TableContainer>
         </div>
-        {editOpen && <Modal onClose={() => setEditOpen(false)}/>}
+        {editOpen && <Modal onClose={() => setEditOpen(false)} editRow={handleEditedRow} defaultValue={rowToEdit !== null && sampleData[rowToEdit]}/>}
     </>
 )
 
