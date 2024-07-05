@@ -80,7 +80,7 @@ function Transactions () {
         <>
             <button onClick={handleAddRow} className="m-5 mt-3 ml-9 border-black border-2 p-2 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Add Transaction</button>
             {addOpen && <AddTransaction onSubmit={handleNewRow} onClose={() => setAddOpen(false)}/>}
-            <div className='h-full'>
+            <div>
                 <TableContainer component={Paper} className='w-[100%]'>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" className='w-[100%] overflow-hidden table-auto border-collapse rounded-sm max-w-[95%] m-auto overflow-x-auto border-2 border-solid'>
                     <TableHead className="bg-gray-300">

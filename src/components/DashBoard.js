@@ -1,4 +1,5 @@
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import PieChart from './PieChart';
+import TypePieChart from './TypePieChart';
 
 function DashBoard() {
 
@@ -97,8 +98,13 @@ function DashBoard() {
                     Highest Type expenses: {<div className="mx-3 font-semibold text-xl">{highestTypeExpenses(sampleData)}</div>}
                     </div>
             </div>
-            <div>
-            
+            <div className="flex justify-around mt-4 mx-4">
+                <label className="text-xl font-semibold">Breakdown of category wise expenses</label>
+                <label className="text-xl font-semibold">Breakdown of Type wise expenses</label>
+            </div>
+            <div className="flex justify-around mx-4">
+                <PieChart />
+                <TypePieChart />
             </div>
         </>
     )

@@ -8,7 +8,6 @@ function Layout () {
                 <div className="mx-4">
                     <ul className="list-none flex pb-2">
                         <li className ="mt-2 ml-[5px] text-2xl ">
-                            <a href="/"></a>
                             <Link to="/DashBoard">
                                 <img className="object-contain h-[50px] w-[50px]"src={logo}/>
                             </Link>
