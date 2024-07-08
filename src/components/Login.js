@@ -4,18 +4,46 @@ function Login() {
 
     const [action,setAction] = useState("login");
 
+    const accountInfo = [
+        {firstname: "Aman",
+        lastname: "Prasad",
+        email:"aman@aman.com",
+        number: 1234567890,
+        },
+        {   firstname:"John",
+            lastname:"Doe",
+            email:"john@john.com",
+            number: 9888888888
+        },
+        {   firstname:"Jane",
+            lastname:"Doe",
+            email:"jane@jane.com",
+            number: 1029384756
+        },
+    ];
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    }
+
+  const handleSlideChange = (event) => {
+    setAction(event.target.id);
+  };
+
+
+
     return (
-        <div className="fixed inset-0 flex justify-center items-center">
+        <div className="fixed inset-0 flex justify-center items-center mt-20">
             <div className="bg-white p-10 border-black border-[0.75px] flex flex-col gap-5 rounded-lg shadow-md">
                 <div>
                     <div className="relative flex h-12 w-full overflow-hidden my-8 mb-2 justify-between border border-lightgrey left-0 z-0 rounded-xl">
-                        <input className="hidden peer/signup" type="radio" name="slide" id="login" defaultChecked />
-                        <input className="hidden peer/login" type="radio" name="slide" id="signup" />
+                        <input className="hidden peer/signup" type="radio" name="slide" id="login" checked={action==="login"} onChange={(e) => handleSlideChange(e)}/>
+                        <input className="hidden peer/login" type="radio" name="slide" id="signup" checked={action==="signup"} onChange={(e) => handleSlideChange(e)}/>
                         <label htmlFor="login" className="mx-auto mt-[6px] text-xl font-semibold slide login cursor-pointer z-10 ">Login</label>
                         <label htmlFor="signup" className="mx-auto mt-[6px] text-xl font-semibold slide signup cursor-pointer z-10 ">Signup</label>
-                        <div className="slider-tab absolute h-full w-1/2 left-0 z-0 rounded-xl gradient-bg transition-all ease-custom"></div>
+                        <div className="slider-tab absolute h-full w-1/2 left-0 z-0 rounded-xl gradient-bg transition-all duration-50 ease-custom"></div>
                     </div>
-                    {action === "login" && <form action="#" className="peer-checked/login:block">
+                    {action === "login" && <form action="#" className="peer-checked/login:block max-w-sm mx-auto w-[24rem] h-auto">
                         <pre></pre>
                         <div className="mb-5">
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-black">Email</label>
