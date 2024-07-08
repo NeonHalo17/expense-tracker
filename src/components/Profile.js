@@ -1,4 +1,5 @@
 import { useState } from "react";
+import EditProfile from "./EditProfile";
 
 function Profile () {
     
@@ -15,20 +16,27 @@ function Profile () {
     const [lastName, setLastName] = useState(data[0].userLastName);
     const [email, setEmail] = useState(data[0].email);
     const [number, setNumber] = useState(data[0].number);
-    
-    const handleProfileEdit = () => {
-        setEditing(!editing);
-        
-    }
 
     // const handleChange = () => {
     //     setFirstName(e.target.value);
     //     setLastName(e.target.value);
     // }
 
+    const handleEditProfile = () => {
+        setEditing(true);
+    }
+
+    const handleEdited = (newData) => {
+        setFirstName(newData.firstName); 
+        setLastName(newData.lastName); 
+        setEmail(newData.email);
+        setNumber(newData.number)
+    }
+
     return (
         <>
-            <button className="m-5 mt-[63px] ml-[1040px] border-black border-2 p-2 px-6 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Edit</button>
+            <button onClick={handleEditProfile} className="m-5 mt-[63px] ml-[1040px] border-black border-2 p-2 px-6 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Edit</button>
+            {editing && <EditProfile onSubmit={handleEdited} onClose={() => setEditing(false)} defaultValue={{firstName, lastName, email, number}}/>}
             <div className="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg mt-[7px] ml-[450px]">
                 <div className="px-4 py-5 sm:px-6">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -42,7 +50,7 @@ function Profile () {
                             Full name
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {editing ? (<input value={firstName} onChange={(e) => console.log(e.target.value)}></input>) : (<p>{firstName} {lastName}</p>)}
+                            {firstName} {lastName}
                         </dd>
                     </div>
                     <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
