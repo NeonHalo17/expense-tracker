@@ -1,29 +1,34 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
 
     const [action,setAction] = useState("login");
 
-    const accountInfo = [
+    const navigate = useNavigate();
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [accountInfo,setAccountInfo] = useState([
         {firstname: "Aman",
         lastname: "Prasad",
+        username: "amanp",
         email:"aman@aman.com",
         number: 1234567890,
+        password: "1234",
         },
-        {   firstname:"John",
-            lastname:"Doe",
-            email:"john@john.com",
-            number: 9888888888
-        },
-        {   firstname:"Jane",
-            lastname:"Doe",
-            email:"jane@jane.com",
-            number: 1029384756
-        },
-    ];
+    ]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(action === "login"){
+            if(username === "amanp" && password === "1234"){
+                navigate("/DashBoard");
+            } else {
+                alert("Wrong credentials");
+            }
+        }
     }
 
   const handleSlideChange = (event) => {
@@ -33,7 +38,7 @@ function Login() {
 
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center mt-20">
+        <div className="fixed inset-0 flex justify-center items-center">
             <div className="bg-white p-10 border-black border-[0.75px] flex flex-col gap-5 rounded-lg shadow-md">
                 <div>
                     <div className="relative flex h-12 w-full overflow-hidden my-8 mb-2 justify-between border border-lightgrey left-0 z-0 rounded-xl">
@@ -46,14 +51,14 @@ function Login() {
                     {action === "login" && <form action="#" className="peer-checked/login:block max-w-sm mx-auto w-[24rem] h-auto">
                         <pre></pre>
                         <div className="mb-5">
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-black">Email</label>
-                            <input type="email" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <label htmlFor="username" className="block mb-2 text-sm font-medium text-black">Username</label>
+                            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-black">Password</label>
-                            <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
                         </div>
-                        <button className="block m-auto text-white bg-black hover:bg-white hover:text-black border-solid border-2 transition duration-300 border-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Log In</button>
+                        <button onClick={(e) => handleSubmit(e)} className="block m-auto text-white bg-black hover:bg-white hover:text-black border-solid border-2 transition duration-300 border-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Log In</button>
                     </form>}
                     {action === "signup" && <form action="#" className="peer-checked/signup:block max-w-sm mx-auto w-[24rem]">
                         <div className="mb-5">
@@ -76,7 +81,7 @@ function Login() {
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-black">Set Password</label>
                             <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
                         </div>
-                        <button className="block m-auto text-white bg-black hover:bg-white hover:text-black border-solid border-2 transition duration-300 border-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign Up</button>
+                        <button onClick={handleSubmit} className="block m-auto text-white bg-black hover:bg-white hover:text-black border-solid border-2 transition duration-300 border-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign Up</button>
                     </form>}
                 </div>
             </div>
