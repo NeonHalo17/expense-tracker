@@ -1,5 +1,6 @@
 import PieChart from './PieChart';
 import TypePieChart from './TypePieChart';
+import { useLocation } from "react-router-dom";
 
 function DashBoard() {
 

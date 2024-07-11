@@ -57,10 +57,11 @@ function Login() {
         e.preventDefault();
         if(action === "login"){
             token.then(result => {
+                let res = result
                 let valid = validateToken(result);
                 valid.then(result => {
-                    if(result) navigate("/dashBoard");
-                    else alert("Invalid Request");
+                    if(result) navigate("/dashboard", { state: { res }});
+                    else alert("Invalid Credentials");
                 })
             });
         }
