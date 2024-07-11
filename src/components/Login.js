@@ -10,32 +10,64 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const [accountInfo,setAccountInfo] = useState([
-        {firstname: "Aman",
-        lastname: "Prasad",
-        username: "amanp",
-        email:"aman@aman.com",
-        number: 1234567890,
-        password: "1234",
-        },
-    ]);
+    let jwtToken;
+
+    async function generateToken(username, password) {
+        try {
+            const data = {
+                "username": username,
+                "password": password
+            };
+            const response = await fetch('http://localhost:8000/auth/generateToken', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            JSON.stringify(response);
+            const result = await response.json();
+            jwtToken=result["jwt"];
+            return jwtToken;
+        } catch(err) {
+            console.error(`Error: ${err}`);
+        }
+    }
+    let token = generateToken(username,password);
+    
+    async function validateToken(jwt) {
+        try {
+            const response = await fetch(`http://localhost:8000/auth/validate`, {
+                method: 'GET',
+                mode: 'cors',
+                headers : {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${jwt}`
+                },
+            });
+            const result = await response.json();
+            return result;
+        } catch (err){
+            console.error(`Error: ${err}`);
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if(action === "login"){
-            if(username === "amanp" && password === "1234"){
-                navigate("/DashBoard");
-            } else {
-                alert("Wrong credentials");
-            }
+            token.then(result => {
+                let valid = validateToken(result);
+                valid.then(result => {
+                    if(result) navigate("/dashBoard");
+                    else alert("Invalid Request");
+                })
+            });
         }
     }
-
   const handleSlideChange = (event) => {
     setAction(event.target.id);
   };
-
-
 
     return (
         <div className="fixed inset-0 flex justify-center items-center">
@@ -74,8 +106,8 @@ function Login() {
                             <input type="email" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
                         </div>
                         <div className="mb-5">
-                            <label htmlFor="number" className="block mb-2 text-sm font-medium text-black">Phone Number</label>
-                            <input type="number" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <label htmlFor="username" className="block mb-2 text-sm font-medium text-black">Username</label>
+                            <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-black">Set Password</label>

@@ -33,9 +33,14 @@ function Profile () {
         setNumber(newData.number)
     }
 
+    const handleLogOut = () => {
+        window.location.href = '/';
+    }
+
     return (
         <>
-            <button onClick={handleEditProfile} className="m-5 mt-[63px] ml-[1040px] border-black border-2 p-2 px-6 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Edit</button>
+            <button onClick={handleLogOut} className="m-5 mt-[63px] ml-[910px] border-black border-2 p-2 px-6 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Logout</button>
+            <button onClick={handleEditProfile} className="m-5 mt-[63px] ml-[10px] border-black border-2 p-2 px-6 rounded-xl bg-black text-white hover:bg-white hover:text-black transition duration-300">Edit</button>
             {editing && <EditProfile onSubmit={handleEdited} onClose={() => setEditing(false)} defaultValue={{firstName, lastName, email, number}}/>}
             <div className="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg mt-[7px] ml-[450px]">
                 <div className="px-4 py-5 sm:px-6">
