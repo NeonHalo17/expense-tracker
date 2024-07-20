@@ -6,7 +6,6 @@ function Profile () {
 
     const location = useLocation();
     const { res } = location.state || {};
-
     async function selfDetails() {
         try {
             const response = await fetch(`http://localhost:8000/auth/selfDetails`, {
@@ -25,7 +24,8 @@ function Profile () {
     }
 
     // selfDetails().then(result => {
-    //     const [first, last] = result["name"].split(" ");
+    //     console.log(result);
+    //     const [first, last] = result["name"];
     //     setFirstName(first);
     //     setLastName(last);
     //     setEmail(result["email"]);
@@ -54,6 +54,7 @@ function Profile () {
 
     const handleEditProfile = () => {
         setEditing(true);
+        console.log(res);
     }
 
     const handleEdited = (newData) => {

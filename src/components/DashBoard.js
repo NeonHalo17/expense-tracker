@@ -4,6 +4,9 @@ import { useLocation } from "react-router-dom";
 
 function DashBoard() {
 
+    const location = useLocation();
+    const { res } = location.state || {};
+
     const sampleData = [
         {
             id: 1,

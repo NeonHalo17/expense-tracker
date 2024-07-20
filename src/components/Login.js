@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -9,6 +9,12 @@ function Login() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const [newFirstName, setNewFirstName] = useState("");
+    const [newLastName, setNewLastName] = useState("");
+    const [newEmail, setNewEmail] = useState("");
+    const [newUsername, setNewUsername] = useState("");
+    const [newPassword, setNewPassword] = useState("");
 
     let jwtToken;
 
@@ -34,7 +40,6 @@ function Login() {
             console.error(`Error: ${err}`);
         }
     }
-    let token = generateToken(username,password);
     
     async function validateToken(jwt) {
         try {
@@ -53,16 +58,52 @@ function Login() {
         }
     }
 
+    async function addUser(data) {
+        try {
+            console.log(JSON.stringify(data));
+            const response = await fetch('http://localhost:8000/auth/addNewUser', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            JSON.stringify(response);
+            const result = await response.text();
+            return result;
+        } catch(err) {
+            console.error(`Error: ${err}`);
+        }
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if(action === "login"){
+            let token = generateToken(username,password);
             token.then(result => {
-                let res = result
+                let res = result;
                 let valid = validateToken(result);
+                console.log(res);
                 valid.then(result => {
                     if(result) navigate("/dashboard", { state: { res }});
                     else alert("Invalid Credentials");
                 })
+            });
+        }if(action==="signup"){
+            let data = {
+                "email": newEmail,
+                "name": `${newFirstName} ${newLastName}`,
+                "password": newPassword,
+                "userName": newUsername
+            }
+            let user = addUser(data);
+            user.then((result) => {
+                if (result === "User Added Successfully") {
+                    generateToken(newUsername, newPassword).then(res => navigate("/profile", { state: { res } }));
+                    navigate("/profile")
+                }
+                else if (result === "Email/Username already exists") alert("Username/Email already exists");
             });
         }
     }
@@ -85,34 +126,34 @@ function Login() {
                         <pre></pre>
                         <div className="mb-5">
                             <label htmlFor="username" className="block mb-2 text-sm font-medium text-black">Username</label>
-                            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Enter Username"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-black">Password</label>
-                            <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Enter Password"/>
                         </div>
                         <button onClick={(e) => handleSubmit(e)} className="block m-auto text-white bg-black hover:bg-white hover:text-black border-solid border-2 transition duration-300 border-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Log In</button>
                     </form>}
                     {action === "signup" && <form action="#" className="peer-checked/signup:block max-w-sm mx-auto w-[24rem]">
                         <div className="mb-5">
                             <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-black">First Name</label>
-                            <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={newFirstName} onChange={(e) => setNewFirstName(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Enter First Name"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-black">Last Name</label>
-                            <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={newLastName} onChange={(e) => setNewLastName(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Enter Last Name"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-black">Email</label>
-                            <input type="email" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Enter Email Address"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="username" className="block mb-2 text-sm font-medium text-black">Username</label>
-                            <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Enter Username"/>
                         </div>
                         <div className="mb-5">
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-black">Set Password</label>
-                            <input type="text" className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5"/>
+                            <input type="text" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="shadow-sm border-[1px] border-black text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Enter Password"/>
                         </div>
                         <button onClick={handleSubmit} className="block m-auto text-white bg-black hover:bg-white hover:text-black border-solid border-2 transition duration-300 border-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign Up</button>
                     </form>}

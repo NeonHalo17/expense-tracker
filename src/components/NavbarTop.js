@@ -14,8 +14,7 @@ function NavbarTop() {
         {/* <BrowserRouter> */}
           <Routes>
             <Route path="/" element={<Layout/>}>
-              {/* <Route index element = {<Login />}/> */}
-              {/* <Route index element = {<DashBoard />}/> */}
+              <Route index element={<DashBoard/>}/>
               <Route path="DashBoard" element = {<DashBoard/>}/>
               <Route path="Transactions" element = {<Transactions/>}/>
               <Route path="Calendar" element = {<Calendar/>}/>
